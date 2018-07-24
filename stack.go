@@ -7,6 +7,16 @@ type Stack struct {
 	stack []interface{}
 }
 
+func (s *Stack) PeekStack() []interface{} {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+	ret := make([]interface{}, 0)
+	for _, v := range s.stack {
+		ret = append(ret, v)
+	}
+	return ret
+}
+
 func (s *Stack) Clear() {
 	s.lock.Lock()
 	defer s.lock.Unlock()
