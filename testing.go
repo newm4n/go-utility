@@ -1,6 +1,7 @@
 package go_utility
 
 import (
+	"reflect"
 	"runtime/debug"
 	"testing"
 )
@@ -24,13 +25,15 @@ func AssertEquals(t *testing.T, expect, actual interface{}) {
 }
 
 func AssertNotNil(t *testing.T, obj interface{}) {
-	if obj == nil {
+	defer func() { recover() }()
+	if obj == nil || reflect.ValueOf(obj).IsNil() {
 		t.Fatalf("Expected not nil, but nil\n%s", string(debug.Stack()))
 	}
 }
 
 func AssertNil(t *testing.T, obj interface{}) {
-	if obj != nil {
+	defer func() { recover() }()
+	if obj != nil || !reflect.ValueOf(obj).IsNil() {
 		t.Fatalf("Expected nil, but not nil\n%s", string(debug.Stack()))
 	}
 }
